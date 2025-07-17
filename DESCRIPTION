@@ -1,0 +1,21 @@
+Package: SFE
+Title: What the Package Does (One Line, Title Case)
+Version: 0.0.0.9000
+Authors@R: 
+    person("Shuangbin", "Xu", , "xshuangbin@163.com", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0003-3513-5362"))
+Description: What the package does (one paragraph).
+License: GPL (>= 3)
+Encoding: UTF-8
+SystemRequirements: GNU make
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
+Depends:
+  R (>= 3.0.2)
+LinkingTo: 
+  Rcpp,
+  RcppArmadillo (>= 14.0),
+  RcppParallel
+Imports: 
+  Rcpp,
+  RcppParallel
