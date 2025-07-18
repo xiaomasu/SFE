@@ -1,6 +1,3 @@
-// [[Rcpp::depends(RcppArmadillo)]]
-// [[Rcpp::depends(RcppParallel)]]
-#define ARMA_64BIT_WORD 1
 #include <RcppArmadillo.h>
 #include <RcppParallel.h>
 #include <map>
@@ -97,7 +94,6 @@ arma::vec merge_columns_parallel(const arma::umat& index_matrix, const arma::sp_
         return arma::vec();
     }
 
-    //arma::uword out_rows = x_sp_mat.n_rows;
     arma::uword out_cols = index_matrix.n_rows;
 
     arma::vec result(out_cols);
