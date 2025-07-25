@@ -8,9 +8,9 @@ using namespace arma;
 
 struct ParallelShannon: public Worker{
   const arma::sp_mat& x;
-  RcppParallel::RVector<double> res;
+  RcppParallel::RMatrix<double> res;
 
-  ParallelShannon(const arma::sp_mat& x, Rcpp::NumericVector res)
+  ParallelShannon(const arma::sp_mat& x, Rcpp::NumericMatrix res)
       :x(x), res(res) { }
   
   void operator()(std::size_t begin, std::size_t end){
@@ -20,8 +20,8 @@ struct ParallelShannon: public Worker{
       uword num_features = column_val.n_nonzero;
 
       if (col_sum <= 0 || column_val.n_nonzero == 0) {  
-          res[i,0] = 0.0;
-	  res[i,1] = 0.0;  
+          res(i,0)= 0.0;
+	  res(i,1) = 0.0;  
           continue;  
       }  
 
@@ -34,10 +34,10 @@ struct ParallelShannon: public Worker{
       
       double pielou = 0.0;
       if(column_val.n_nonzero > 1){
-	      pielou = shannon / (std::log(num_features) / std::log(2.0));
+	      pielou = shannon / (std::log2(num_features));
       }
-      res[i,0] = shannon;
-      res[i,1] = pielou;  
+      res(i,0) = shannon;
+      res(i,1) = pielou;  
      
     }
   }
@@ -45,14 +45,15 @@ struct ParallelShannon: public Worker{
 
 
 // [[Rcpp::export]]
-NumericVector cal_shannon(arma::sp_mat x){
+NumericMatrix cal_shannon(arma::sp_mat x){
   int n = x.n_cols;
-  NumericMatrix res(n,2);
+  Rcpp::NumericMatrix res(n,2);
+
   ParallelShannon parallelshannon(x, res);
 
   parallelFor(0, n, parallelshannon);
 
-  return as<NumericVector>(res);
+  return res;
  
 }
 
